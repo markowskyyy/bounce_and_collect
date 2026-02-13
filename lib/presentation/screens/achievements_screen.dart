@@ -1,5 +1,6 @@
 import 'package:bounce_and_collect/core/consts/design.dart';
 import 'package:bounce_and_collect/data/services/providers.dart';
+import 'package:bounce_and_collect/domain/achievements_notifier.dart';
 import 'package:bounce_and_collect/domain/entities/achievement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,9 +11,11 @@ class AchievementsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final achievementsAsync = ref.watch(achievementsFutureProvider);
+    final achievements = ref.watch(achievementsProvider);
+    // final achievementsAsync = ref.watch(achievementsFutureProvider);
     final gamesPlayedAsync = ref.watch(gamesPlayedProvider);
     final highScoreAsync = ref.watch(highScoreProvider);
+    final unlockedCount = achievements.where((a) => a.isUnlocked).length;
 
     return Scaffold(
       appBar: AppBar(
@@ -20,11 +23,7 @@ class AchievementsScreen extends ConsumerWidget {
         backgroundColor: AppColors.background,
         elevation: 0,
       ),
-      body: achievementsAsync.when(
-        data: (achievements) {
-          final unlockedCount = achievements.where((a) => a.isUnlocked).length;
-
-          return Column(
+      body:  Column(
             children: [
               Container(
                 padding: const EdgeInsets.all(20),
@@ -63,11 +62,8 @@ class AchievementsScreen extends ConsumerWidget {
                 ),
               ),
             ],
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (_, __) => const Center(child: Text('Ошибка загрузки')),
-      ),
+          ),
+
     );
   }
 

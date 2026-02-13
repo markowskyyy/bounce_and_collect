@@ -26,6 +26,14 @@ class Achievement {
     );
   }
 
+  Achievement setProgress(int value) {
+    if (isUnlocked) return this;
+    return copyWith(
+      currentValue: value,
+      isUnlocked: value >= targetValue,
+    );
+  }
+
   Map<String, dynamic> toJson() => {
     'id': id, 'currentValue': currentValue, 'isUnlocked': isUnlocked
   };

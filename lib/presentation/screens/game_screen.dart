@@ -1,5 +1,5 @@
 import 'package:bounce_and_collect/core/consts/design.dart';
-import 'package:bounce_and_collect/domain/entities/game_notifier.dart';
+import 'package:bounce_and_collect/domain/game_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
