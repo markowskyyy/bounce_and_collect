@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
-    initialLocation: '/about',
+    initialLocation: '/achievements',
     debugLogDiagnostics: true,
     routes: [
       StatefulShellRoute.indexedStack(

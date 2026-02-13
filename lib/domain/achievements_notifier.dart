@@ -9,9 +9,7 @@ class AchievementsNotifier extends StateNotifier<List<Achievement>> {
     _loadAchievements();
   }
 
-  // ============ ЗАГРУЗКА ============
   Future<void> _loadAchievements() async {
-    print('========== ЗАГРУЗКА ДОСТИЖЕНИЙ ==========');
 
     final savedData = await _storage.loadAchievements();
     final gamesPlayed = await _storage.loadGamesPlayed();
@@ -32,20 +30,14 @@ class AchievementsNotifier extends StateNotifier<List<Achievement>> {
     }).toList();
 
     state = updated;
-    print('📊 state обновлен: ${state.map((a) => '${a.id}: ${a.currentValue}/${a.targetValue}')}');
-    print('==========================================');
   }
 
-  // ============ ОБНОВЛЕНИЕ ОЧКОВ ============
   Future<void> updateScoreProgress(int score) async {
-    print('🏆 updateScoreProgress: score=$score');
-
     final newState = state.map((a) {
       print('a $a');
       if (a.id == 'score_10' || a.id == 'score_50' || a.id == 'score_100') {
         final updated = a.addProgress(score);
         _storage.updateAchievement(a.id, updated.currentValue);
-        print('  ✅ Сохраняем ${a.id} = ${updated.currentValue}');
         return updated;
       }
       return a;
@@ -54,7 +46,6 @@ class AchievementsNotifier extends StateNotifier<List<Achievement>> {
     state = newState;
   }
 
-  // ============ ОБНОВЛЕНИЕ ИГР ============
   Future<void> incrementGamesPlayed() async {
     final gamesPlayed = await _storage.incrementGamesPlayed();
 
@@ -72,7 +63,6 @@ class AchievementsNotifier extends StateNotifier<List<Achievement>> {
     state = newState;
   }
 
-  // ============ СБРОС ============
   Future<void> resetAll() async {
     await _storage.resetAchievements();
     state = Achievement.all;

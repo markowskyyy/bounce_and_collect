@@ -15,14 +15,12 @@ class StorageService {
   Future<void> saveAchievements(List<Achievement> achievements) async {
     final prefs = await _getPrefs();
 
-    // Сохраняем только нужные поля: id -> currentValue
     final Map<String, int> data = {};
     for (var a in achievements) {
       data[a.id] = a.currentValue;
     }
 
     final stringToSave = data.toString();
-    print('💾 saveAchievements: $stringToSave');
     await prefs.setString(_achievementsKey, stringToSave);
   }
 
@@ -31,19 +29,15 @@ class StorageService {
     final prefs = await _getPrefs();
     final String? savedString = prefs.getString(_achievementsKey);
 
-    print('📂 loadAchievements raw: "$savedString"');
-
     if (savedString == null || savedString.isEmpty || savedString == '{}') {
       return {};
     }
 
     try {
       final Map<String, int> result = {};
-      // Убираем { и }
       final cleaned = savedString.replaceAll('{', '').replaceAll('}', '');
       if (cleaned.isEmpty) return {};
 
-      // Разбираем "score_10: 2, score_50: 2, score_100: 2"
       final pairs = cleaned.split(', ');
 
       for (var pair in pairs) {
@@ -55,20 +49,16 @@ class StorageService {
         }
       }
 
-      print('📂 loadAchievements parsed: $result');
       return result;
     } catch (e) {
-      print('❌ Ошибка парсинга: $e');
       return {};
     }
   }
 
   Future<void> updateAchievement(String id, int value) async {
-    print('🔄 updateAchievement START: $id = $value');
 
     final prefs = await _getPrefs();
 
-    // 1️⃣ ЧИТАЕМ НАПРЯМУЮ ИЗ PREFS, А НЕ ЧЕРЕЗ loadAchievements
     final String? savedString = prefs.getString(_achievementsKey);
     final Map<String, int> achievements = {};
 
@@ -87,34 +77,19 @@ class StorageService {
           }
         }
       } catch (e) {
-        print('❌ Ошибка парсинга: $e');
+        print('Ошибка парсинга: $e');
       }
     }
 
-    print('📦 Текущие achievements: $achievements');
-
-    // 2️⃣ Обновляем ТОЛЬКО одно
     achievements[id] = value;
-    print('📦 После обновления: $achievements');
-
-    // 3️⃣ Сохраняем ВСЁ
     final stringToSave = achievements.toString();
-    print('💾 Сохраняем строку: "$stringToSave"');
-
     await prefs.setString(_achievementsKey, stringToSave);
-
-    // 4️⃣ Проверяем, что сохранилось
-    final savedBack = prefs.getString(_achievementsKey);
-    print('✅ Проверка сохранения: "$savedBack"');
-
-    print('🔄 updateAchievement END');
   }
 
   /// Сбросить все достижения
   Future<void> resetAchievements() async {
     final prefs = await _getPrefs();
     await prefs.remove(_achievementsKey);
-    print('🗑️ Achievements сброшены');
   }
 
   /// Сохранить количество сыгранных игр (+1)
@@ -123,7 +98,6 @@ class StorageService {
     final current = prefs.getInt(_gamesPlayedKey) ?? 0;
     final newValue = current + 1;
     await prefs.setInt(_gamesPlayedKey, newValue);
-    print('🎮 gamesPlayed: $current -> $newValue');
     return newValue;
   }
 
@@ -131,7 +105,6 @@ class StorageService {
   Future<int> loadGamesPlayed() async {
     final prefs = await _getPrefs();
     final value = prefs.getInt(_gamesPlayedKey) ?? 0;
-    print('📊 loadGamesPlayed: $value');
     return value;
   }
 
@@ -142,7 +115,6 @@ class StorageService {
 
     if (score > current) {
       await prefs.setInt(_highScoreKey, score);
-      print('🏆 highScore: $current -> $score');
     }
   }
 
@@ -150,7 +122,6 @@ class StorageService {
   Future<int> loadHighScore() async {
     final prefs = await _getPrefs();
     final value = prefs.getInt(_highScoreKey) ?? 0;
-    print('🏆 loadHighScore: $value');
     return value;
   }
 
@@ -160,7 +131,6 @@ class StorageService {
     final current = prefs.getInt(_totalScoreKey) ?? 0;
     final newValue = current + score;
     await prefs.setInt(_totalScoreKey, newValue);
-    print('💰 totalScore: $current -> $newValue');
   }
 
   /// Загрузить общий счет
@@ -174,7 +144,6 @@ class StorageService {
   Future<void> clearAll() async {
     final prefs = await _getPrefs();
     await prefs.clear();
-    print('🧹 Все данные очищены');
   }
 
   /// Получить всю статистику одной строкой

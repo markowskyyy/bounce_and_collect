@@ -19,7 +19,6 @@ class AboutScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Лого
               Container(
                 width: 120,
                 height: 120,

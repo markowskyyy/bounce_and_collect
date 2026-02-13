@@ -1,7 +1,6 @@
 import 'package:bounce_and_collect/data/services/providers.dart';
 import 'package:bounce_and_collect/data/services/storage_service.dart';
 import 'package:bounce_and_collect/domain/entities/game_state.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final gameProvider = StateNotifierProvider<GameNotifier, GameState>((ref) {
