@@ -2,14 +2,11 @@ import 'package:bounce_and_collect/domain/entities/achievement.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'storage_service.dart';
 
-// ============ ПРОВАЙДЕРЫ ДЛЯ СЕРВИСОВ ============
 
-/// Провайдер для StorageService (синглтон)
+/// Провайдер для StorageService
 final storageServiceProvider = Provider<StorageService>((ref) {
   return StorageService();
 });
-
-// ============ ПРОВАЙДЕРЫ ДЛЯ АЧИВОК ============
 
 /// FutureProvider для загрузки достижений
 final achievementsFutureProvider = FutureProvider<List<Achievement>>((ref) async {
@@ -17,11 +14,9 @@ final achievementsFutureProvider = FutureProvider<List<Achievement>>((ref) async
   final savedData = await storage.loadAchievements();
   final gamesPlayed = await storage.loadGamesPlayed();
 
-  // Берем все достижения из списка
   final achievements = Achievement.all.map((template) {
     final savedValue = savedData[template.id] ?? 0;
 
-    // Особые случаи
     if (template.id == 'games_5' || template.id == 'games_20') {
       return template.copyWith(
         currentValue: gamesPlayed,
@@ -54,8 +49,6 @@ final highScoreProvider = FutureProvider<int>((ref) async {
   final storage = ref.watch(storageServiceProvider);
   return await storage.loadHighScore();
 });
-
-// ============ НОТИФАЙЕР ДЛЯ АЧИВОК ============
 
 /// StateNotifier для управления достижениями
 final achievementsNotifierProvider = StateNotifierProvider<AchievementsNotifier, List<Achievement>>((ref) {
@@ -92,7 +85,7 @@ class AchievementsNotifier extends StateNotifier<List<Achievement>> {
     state = updated;
   }
 
-  /// Добавить прогресс к достижению
+  /// Добавление прогресса к достижению
   Future<void> addProgress(String id, int amount) async {
     final storage = ref.read(storageServiceProvider);
 
@@ -111,13 +104,12 @@ class AchievementsNotifier extends StateNotifier<List<Achievement>> {
     await storage.updateAchievement(id, updated.currentValue);
   }
 
-  /// Обновить прогресс по очкам
+  /// Обновление прогресса по очкам
   Future<void> updateScoreProgress(int score) async {
     await addProgress('score_10', score);
     await addProgress('score_50', score);
     await addProgress('score_100', score);
 
-    // Сохраняем рекорд
     final storage = ref.read(storageServiceProvider);
     await storage.updateHighScore(score);
     await storage.addTotalScore(score);
@@ -128,7 +120,6 @@ class AchievementsNotifier extends StateNotifier<List<Achievement>> {
     final storage = ref.read(storageServiceProvider);
     final gamesPlayed = await storage.incrementGamesPlayed();
 
-    // Обновляем ачивки на количество игр
     final updated = state.map((a) {
       if (a.id == 'games_5' || a.id == 'games_20') {
         final isUnlocked = gamesPlayed >= a.targetValue;
@@ -141,8 +132,6 @@ class AchievementsNotifier extends StateNotifier<List<Achievement>> {
     }).toList();
 
     state = updated;
-
-    // Сохраняем изменения
     await storage.saveAchievements(state);
   }
 

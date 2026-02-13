@@ -15,7 +15,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return MainScreen(navigationShell: navigationShell);
         },
         branches: [
-          // Вкладка 1: Игра
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -27,8 +26,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               ),
             ],
           ),
-
-          // Вкладка 2: Достижения
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -40,8 +37,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               ),
             ],
           ),
-
-          // Вкладка 3: О приложении
           StatefulShellBranch(
             routes: [
               GoRoute(

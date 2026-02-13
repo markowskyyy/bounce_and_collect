@@ -19,11 +19,10 @@ class AppColors {
   static const Color textDisabled = Colors.white38;
 
   // Игровые объекты
-  static const Color ball = Colors.white;              // Мяч
-  static const Color platform = primary;               // Платформа
+  static const Color ball = Colors.white;
+  static const Color platform = primary;
 }
 
-// ============ ТЕКСТ ============
 class AppTextStyles {
   // Заголовки
   static const TextStyle headline = TextStyle(
@@ -39,7 +38,6 @@ class AppTextStyles {
     color: AppColors.textPrimary,
   );
 
-  // Игровой счет
   static const TextStyle gameScore = TextStyle(
     fontSize: 48,
     fontWeight: FontWeight.bold,
@@ -99,7 +97,6 @@ class AppTextStyles {
   );
 }
 
-// ============ ТЕМА ============
 class AppTheme {
   static ThemeData get dark {
     return ThemeData.dark().copyWith(
@@ -191,7 +188,6 @@ class AppSizes {
   static const double bottomNavHeight = 60.0;
 }
 
-// ============ ТЕНИ ============
 class AppShadows {
   static List<BoxShadow> get small => [
     BoxShadow(
@@ -235,7 +231,6 @@ class AppAnimations {
   static const Curve bounceCurve = Curves.elasticOut;
 }
 
-// ============ ИКОНКИ ============
 class AppIcons {
   // Навигация
   static const IconData game = Icons.sports_esports;
